@@ -18,7 +18,7 @@ function saveToJson (data) {
 }
 
 function getChapters (data) {
-  const startIndex = data.indexOf('00:00')
+  const startIndex = data.indexOf('0:00')
   const chapters = data.slice(startIndex)
   // some cleaning and trimming to get needed response
   const cleanChapters = chapters
