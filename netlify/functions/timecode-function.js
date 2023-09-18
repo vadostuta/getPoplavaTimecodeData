@@ -8,10 +8,10 @@ const { google } = require('googleapis');
 // require("firebase/storage");
 // const { getStorage, ref, uploadBytesResumable } = require("firebase/storage");
 
-const {Storage} = require('@google-cloud/storage');
+// const {Storage} = require('@google-cloud/storage');
 
 // const { firebase } = require('@firebase/storage');
-const fs = require('fs');
+// const fs = require('fs');
 
 const arrVideosIds = []
 const formattedChapters = []
@@ -257,55 +257,18 @@ async function getTimecodeData () {
 const admin = require('firebase-admin');
 const serviceAccount = require('../firebase-admin-key.json');
 
-async function uploadJsonFile() {
-  console.log('start');
-  await getTimecodeData();
-  // console.log('gav');
-  // console.log(gav);
-  // console.log('end');
-  // const jsonString = JSON.stringify(gav);
+// async function uploadJsonFile() {
+//   await getTimecodeData();
 
+//   admin.initializeApp({
+//     credential: admin.credential.cert(serviceAccount),
+//   });
 
-// console.log(serviceAccount);
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-  });
+//   const bucket = admin.storage().bucket('poplava-544f3.appspot.com');
+//   const fileName = 'poplava.json';
 
-  const bucket = admin.storage().bucket('poplava-544f3.appspot.com');
-  const fileName = 'poplava.json';
+//   const buffer = Buffer.from(gav, 'utf-8');
 
-  // Convert the array to a JSON string
-  // const jsonString = JSON.stringify([
-  //   {
-  //     id: 'ga12',
-  //     name: 'gav',
-  //   },
-  // ]);
-
-  // console.log('bucket');
-  // console.log(bucket);
-  // Create a buffer from the JSON string
-  const buffer = Buffer.from(gav, 'utf-8');
-  // console.log('buffer');
-  // console.log(buffer);
-  const contents = 'This is the contents of the file.';
-
-  file.save(contents, function(err) {
-  if (!err) {
-    // File written successfully.
-    console.log(1);
-  } else {
-    console.log(2);
-  }
-});
-
-file.save(contents).then(function(r) {
-  console.log(r);
-}).catch(err => {
-  console.log(err);
-});
-
-//   try {
 //   bucket
 //     .file(fileName) // Specify the file in the bucket
 //     .save(buffer, {
@@ -319,10 +282,51 @@ file.save(contents).then(function(r) {
 //     .catch((error) => {
 //       console.error('Error uploading data to Firebase Storage:', error.message);
 //     });
-// } catch (error) {
-//   console.error('Error:', error);
 // }
-  
+
+const { Storage } = require('@google-cloud/storage');
+const fs = require('fs');
+
+async function uploadJsonFile() {
+
+  // Your JSON data (an array of objects in this example)
+  const jsonData = [
+    { id: 1, name: 'John' },
+    { id: 2, name: 'Jane' },
+  ];
+
+  // Convert the JSON data to a JSON string
+  const jsonString = JSON.stringify(jsonData);
+
+  // Create a buffer from the JSON string
+  const buffer = Buffer.from(jsonString, 'utf-8');
+
+  // Initialize Firebase Storage
+  const storage = new Storage({
+    projectId: 'poplava-544f3', // Replace with your Firebase project ID
+    keyFilename: 'path-to-your-firebase-admin-key-file.json', // Replace with the path to your service account key file
+  });
+
+  // Specify the filename and destination in your storage bucket
+  const bucketName = 'poplava-544f3.appspot.com'; // Replace with your storage bucket name
+  const fileName = 'poplava.json'; // Replace with the desired filename
+
+  // Upload the buffer to Firebase Storage
+  const bucket = storage.bucket(bucketName);
+  const file = bucket.file(fileName);
+
+  try {
+    console.log('trying');
+    await file.save(buffer, {
+      metadata: {
+        contentType: 'application/json',
+      },
+    });
+
+    console.log(`Data uploaded to Firebase Storage successfully.`);
+  } catch (error) {
+    console.error('Error uploading data to Firebase Storage:', error.message);
+  }
 }
 
 
@@ -351,5 +355,5 @@ const handler = async (event, context) => {
   };
 };
 // exports.handler = schedule("@hourly", handler);
-exports.handler = schedule("38 14  * * *", handler);
+exports.handler = schedule("55 14  * * *", handler);
 // exports.handler = schedule('58 22 * * *', exports.handler);
