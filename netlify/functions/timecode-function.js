@@ -62,7 +62,7 @@ async function getVideoChapters (videoId) {
   }
 
   const payload = {
-    key: process.env.YOUTUBE_TOKEN,
+    key: process.env.GAV,
     id: videoId,
     part: 'snippet'
   }
@@ -108,7 +108,7 @@ async function getAllChaptersData () {
 
 async function getAllChapters (nextPageToken) {
   const payload = {
-    key: process.env.YOUTUBE_TOKEN,
+    key: process.env.GAV,
     channelId: 'UCwCkRo2WQx_9JRWISLC47fw', // TODO: add in envs
     part: 'snippet,id',
     order: 'date',
@@ -324,5 +324,5 @@ const handler = async (event, context) => {
   };
 };
 // exports.handler = schedule("@hourly", handler);
-exports.handler = schedule("08 07  * * *", handler);
+exports.handler = schedule("23 07  * * *", handler);
 // exports.handler = schedule('58 22 * * *', exports.handler);
