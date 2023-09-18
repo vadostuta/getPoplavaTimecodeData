@@ -256,13 +256,17 @@ async function getTimecodeData () {
 // }
 
 async function uploadJsonFile() {
+  console.log('start');
   await getTimecodeData();
+  console.log('gav');
+  console.log(gav);
+  console.log('end');
   // const jsonString = JSON.stringify(gav);
 
 
   const admin = require('firebase-admin');
   const serviceAccount = require('../../firebase-admin-key.json');
-
+console.log(serviceAccount);
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
   });
@@ -278,8 +282,13 @@ async function uploadJsonFile() {
   //   },
   // ]);
 
+  console.log('bucket');
+  console.log(bucket);
   // Create a buffer from the JSON string
   const buffer = Buffer.from(gav, 'utf-8');
+  console.log('buffer');
+  console.log(buffer);
+  
 
   bucket
     .file(fileName) // Specify the file in the bucket
@@ -308,14 +317,12 @@ const handler = async (event, context) => {
   console.log('finish');
   return {
     statusCode: 200,
-    body: 'heelo'
   };
   } catch (e) {
     console.log({ e });
     return {
       statusCode: 500,
       message: e,
-      body: 'heelo error'
     }
   }
 
@@ -324,5 +331,5 @@ const handler = async (event, context) => {
   };
 };
 // exports.handler = schedule("@hourly", handler);
-exports.handler = schedule("30 11  * * *", handler);
+exports.handler = schedule("37 11  * * *", handler);
 // exports.handler = schedule('58 22 * * *', exports.handler);
