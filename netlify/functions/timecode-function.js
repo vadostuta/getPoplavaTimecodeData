@@ -302,7 +302,7 @@ async function uploadJsonFile() {
   // Create a buffer from the JSON string
   const buffer = Buffer.from(jsonString, 'utf-8');
 
-  const keyFilename = path.join(__dirname, 'firebase-admin-key.json'); // Construct an absolute path
+  const keyFilename = path.join(__dirname, '../../firebase-admin-key.json'); // Construct an absolute path
 
 
   // Initialize Firebase Storage
@@ -359,5 +359,5 @@ const handler = async (event, context) => {
   };
 };
 // exports.handler = schedule("@hourly", handler);
-exports.handler = schedule("21 15  * * *", handler);
+exports.handler = schedule("27 15  * * *", handler);
 // exports.handler = schedule('58 22 * * *', exports.handler);
