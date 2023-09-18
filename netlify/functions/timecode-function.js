@@ -289,15 +289,15 @@ const fs = require('fs');
 const path = require('path');
 
 async function uploadJsonFile() {
-
+  await getTimecodeData();
   // Your JSON data (an array of objects in this example)
-  const jsonData = [
-    { id: 1, name: 'John' },
-    { id: 2, name: 'Jane' },
-  ];
+  // const jsonData = [
+  //   { id: 1, name: 'John' },
+  //   { id: 2, name: 'Jane' },
+  // ];
 
   // Convert the JSON data to a JSON string
-  const jsonString = JSON.stringify(jsonData);
+  const jsonString = JSON.stringify(gav);
 
   // Create a buffer from the JSON string
   const buffer = Buffer.from(jsonString, 'utf-8');
@@ -359,5 +359,5 @@ const handler = async (event, context) => {
   };
 };
 // exports.handler = schedule("@hourly", handler);
-exports.handler = schedule("27 15  * * *", handler);
+exports.handler = schedule("31 15  * * *", handler);
 // exports.handler = schedule('58 22 * * *', exports.handler);
