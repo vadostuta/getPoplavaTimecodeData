@@ -254,8 +254,8 @@ async function getTimecodeData () {
 
 //   console.log('JSON file uploaded successfully.');
 // }
-const admin = require('firebase-admin');
-const serviceAccount = require('../firebase-admin-key.json');
+// const admin = require('firebase-admin');
+// const serviceAccount = require('../firebase-admin-key.json');
 
 // async function uploadJsonFile() {
 //   await getTimecodeData();
@@ -304,7 +304,7 @@ async function uploadJsonFile() {
   // Initialize Firebase Storage
   const storage = new Storage({
     projectId: 'poplava-544f3', // Replace with your Firebase project ID
-    keyFilename: 'path-to-your-firebase-admin-key-file.json', // Replace with the path to your service account key file
+    keyFilename: './firebase-admin-key.json', // Replace with the path to your service account key file
   });
 
   // Specify the filename and destination in your storage bucket
@@ -355,5 +355,5 @@ const handler = async (event, context) => {
   };
 };
 // exports.handler = schedule("@hourly", handler);
-exports.handler = schedule("55 14  * * *", handler);
+exports.handler = schedule("04 15  * * *", handler);
 // exports.handler = schedule('58 22 * * *', exports.handler);
