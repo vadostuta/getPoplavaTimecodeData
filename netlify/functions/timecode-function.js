@@ -286,6 +286,7 @@ async function getTimecodeData () {
 
 const { Storage } = require('@google-cloud/storage');
 const fs = require('fs');
+const path = require('path');
 
 async function uploadJsonFile() {
 
@@ -301,10 +302,13 @@ async function uploadJsonFile() {
   // Create a buffer from the JSON string
   const buffer = Buffer.from(jsonString, 'utf-8');
 
+  const keyFilename = path.join(__dirname, 'firebase-admin-key.json'); // Construct an absolute path
+
+
   // Initialize Firebase Storage
   const storage = new Storage({
     projectId: 'poplava-544f3', // Replace with your Firebase project ID
-    keyFilename: './firebase-admin-key.json', // Replace with the path to your service account key file
+    keyFilename: keyFilename, // Replace with the path to your service account key file
   });
 
   // Specify the filename and destination in your storage bucket
@@ -355,5 +359,5 @@ const handler = async (event, context) => {
   };
 };
 // exports.handler = schedule("@hourly", handler);
-exports.handler = schedule("04 15  * * *", handler);
+exports.handler = schedule("21 15  * * *", handler);
 // exports.handler = schedule('58 22 * * *', exports.handler);
