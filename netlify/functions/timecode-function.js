@@ -254,6 +254,8 @@ async function getTimecodeData () {
 
 //   console.log('JSON file uploaded successfully.');
 // }
+const admin = require('firebase-admin');
+const serviceAccount = require('../firebase-admin-key.json');
 
 async function uploadJsonFile() {
   console.log('start');
@@ -264,9 +266,7 @@ async function uploadJsonFile() {
   // const jsonString = JSON.stringify(gav);
 
 
-  const admin = require('firebase-admin');
-  const serviceAccount = require('../firebase-admin-key.json');
-console.log(serviceAccount);
+// console.log(serviceAccount);
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
   });
@@ -283,13 +283,14 @@ console.log(serviceAccount);
   // ]);
 
   console.log('bucket');
-  console.log(bucket);
+  // console.log(bucket);
   // Create a buffer from the JSON string
   const buffer = Buffer.from(gav, 'utf-8');
   console.log('buffer');
-  console.log(buffer);
+  // console.log(buffer);
   
 
+  try {
   bucket
     .file(fileName) // Specify the file in the bucket
     .save(buffer, {
@@ -303,6 +304,10 @@ console.log(serviceAccount);
     .catch((error) => {
       console.error('Error uploading data to Firebase Storage:', error.message);
     });
+} catch (error) {
+  console.error('Error:', error);
+}
+  
 }
 
 
@@ -331,5 +336,5 @@ const handler = async (event, context) => {
   };
 };
 // exports.handler = schedule("@hourly", handler);
-exports.handler = schedule("05 12  * * *", handler);
+exports.handler = schedule("23 12  * * *", handler);
 // exports.handler = schedule('58 22 * * *', exports.handler);
