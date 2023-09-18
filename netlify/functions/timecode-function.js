@@ -260,9 +260,9 @@ const serviceAccount = require('../firebase-admin-key.json');
 async function uploadJsonFile() {
   console.log('start');
   await getTimecodeData();
-  console.log('gav');
-  console.log(gav);
-  console.log('end');
+  // console.log('gav');
+  // console.log(gav);
+  // console.log('end');
   // const jsonString = JSON.stringify(gav);
 
 
@@ -282,31 +282,46 @@ async function uploadJsonFile() {
   //   },
   // ]);
 
-  console.log('bucket');
+  // console.log('bucket');
   // console.log(bucket);
   // Create a buffer from the JSON string
   const buffer = Buffer.from(gav, 'utf-8');
-  console.log('buffer');
+  // console.log('buffer');
   // console.log(buffer);
-  
+  const contents = 'This is the contents of the file.';
 
-  try {
-  bucket
-    .file(fileName) // Specify the file in the bucket
-    .save(buffer, {
-      metadata: {
-        contentType: 'application/json',
-      },
-    })
-    .then(() => {
-      console.log(`Data uploaded to Firebase Storage successfully.`);
-    })
-    .catch((error) => {
-      console.error('Error uploading data to Firebase Storage:', error.message);
-    });
-} catch (error) {
-  console.error('Error:', error);
-}
+  file.save(contents, function(err) {
+  if (!err) {
+    // File written successfully.
+    console.log(1);
+  } else {
+    console.log(2);
+  }
+});
+
+file.save(contents).then(function(r) {
+  console.log(r);
+}).catch(err => {
+  console.log(err);
+});
+
+//   try {
+//   bucket
+//     .file(fileName) // Specify the file in the bucket
+//     .save(buffer, {
+//       metadata: {
+//         contentType: 'application/json',
+//       },
+//     })
+//     .then(() => {
+//       console.log(`Data uploaded to Firebase Storage successfully.`);
+//     })
+//     .catch((error) => {
+//       console.error('Error uploading data to Firebase Storage:', error.message);
+//     });
+// } catch (error) {
+//   console.error('Error:', error);
+// }
   
 }
 
@@ -336,5 +351,5 @@ const handler = async (event, context) => {
   };
 };
 // exports.handler = schedule("@hourly", handler);
-exports.handler = schedule("23 12  * * *", handler);
+exports.handler = schedule("38 14  * * *", handler);
 // exports.handler = schedule('58 22 * * *', exports.handler);
