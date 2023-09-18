@@ -1,10 +1,7 @@
 {
   "name": "poplava-api",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-  },
+  "description": "netlify function to get youtube timecode from youtube channel https://www.youtube.com/@Pravonapoplavu",
   "keywords": [],
   "author": "",
   "license": "MIT",
@@ -12,8 +9,6 @@
     "@google-cloud/storage": "^7.1.0",
     "@netlify/functions": "^2.0.2",
     "dotenv": "^16.3.1",
-    "firebase": "10.4.0",
-    "firebase-admin": "^11.10.1",
     "googleapis": "^126.0.1"
   }
 }
