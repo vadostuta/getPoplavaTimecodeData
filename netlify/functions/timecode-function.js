@@ -265,7 +265,7 @@ async function uploadJsonFile() {
 
 
   const admin = require('firebase-admin');
-  const serviceAccount = require('../../firebase-admin-key.json');
+  const serviceAccount = require('../firebase-admin-key.json');
 console.log(serviceAccount);
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
@@ -331,5 +331,5 @@ const handler = async (event, context) => {
   };
 };
 // exports.handler = schedule("@hourly", handler);
-exports.handler = schedule("37 11  * * *", handler);
+exports.handler = schedule("05 12  * * *", handler);
 // exports.handler = schedule('58 22 * * *', exports.handler);
