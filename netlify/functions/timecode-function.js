@@ -6,7 +6,7 @@ const { google } = require('googleapis')
 const { Storage } = require('@google-cloud/storage')
 const path = require('path')
 
-const arrVideosIds = []
+const chaptersVideosIds = []
 const formattedChapters = []
 
 let mainJSONData
@@ -25,7 +25,7 @@ function getChapters (data) {
   return cleanChapters
 }
 
-async function getVideoChapters (videoId) {
+async function getVideoChaptersData (videoId) {
   if (!videoId) {
     return
   }
@@ -53,9 +53,9 @@ async function getVideoChapters (videoId) {
   }
 }
 
-async function getAllChaptersData () {
-  const videosIdsPromises = arrVideosIds.map(
-    async videoIds => await getVideoChapters(videoIds)
+async function setMainJSONData () {
+  const videosIdsPromises = chaptersVideosIds.map(
+    async videoIds => await getVideoChaptersData(videoIds)
   )
 
   await Promise.all(videosIdsPromises)
@@ -64,10 +64,10 @@ async function getAllChaptersData () {
   mainJSONData = JSON.stringify(formattedChapters)
 }
 
-async function getAllChapters (nextPageToken) {
+async function updateChaptersVideosIds (nextPageToken) {
   const payload = {
     key: process.env.YOUTUBE_TOKEN,
-    channelId: 'UCwCkRo2WQx_9JRWISLC47fw', // TODO: add in envs
+    channelId: process.env.YOUTUBE_CHANNEL_ID,
     part: 'snippet,id',
     order: 'date',
     maxResults: '50', // youtube can give us only max 50 items per request
@@ -77,12 +77,12 @@ async function getAllChapters (nextPageToken) {
   try {
     const res = await google.youtube('v3').search.list(payload)
     const videoIds = res.data.items.map(el => el.id.videoId)
-    arrVideosIds.push(...videoIds)
+    chaptersVideosIds.push(...videoIds)
     if (res.data.nextPageToken) {
-      await getAllChapters(res.data.nextPageToken)
+      await updateChaptersVideosIds(res.data.nextPageToken)
     } else {
       // If there's no 'nextPageToken,' assume that it's the last page.
-      await getAllChaptersData()
+      await setMainJSONData()
     }
   } catch (err) {
     console.log(err)
@@ -95,10 +95,10 @@ async function getTimecodeData () {
    * - get all videos id
    * - from all that ids get video data
    */
-  await getAllChapters()
+  await updateChaptersVideosIds()
 }
 
-async function uploadJsonFile () {
+async function uploadJsonFileToFirebase () {
   // by await here we wait for mainJSONData to be setted
   await getTimecodeData()
 
@@ -112,13 +112,13 @@ async function uploadJsonFile () {
 
   // Initialize Firebase Storage
   const storage = new Storage({
-    projectId: 'poplava-544f3', // your Firebase project ID
-    keyFilename: keyFilename // path to your service account key file
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    keyFilename: keyFilename
   })
 
   // Specify the filename and destination in your storage bucket
-  const bucketName = 'poplava-544f3.appspot.com' // your storage bucket name
-  const fileName = 'poplava.json' // filename in storage
+  const bucketName = process.env.STORAGE_BUCKET_NAME
+  const fileName = process.env.FILENAME_IN_STORAGE
 
   // Upload the buffer to Firebase Storage
   const bucket = storage.bucket(bucketName)
@@ -139,7 +139,7 @@ async function uploadJsonFile () {
 
 const handler = async (event, context) => {
   try {
-    await uploadJsonFile()
+    await uploadJsonFileToFirebase()
 
     return {
       statusCode: 200
